@@ -7,59 +7,159 @@
 		margin: 0;
 		padding:0;
 	}
+	.row{
+		line-height: 0;
+	}
 	  .wall {
 	  	background-color: blue;
 	  	height: 40px;
 	  	width: 40px;
 	  	display: inline-block;
 	  }
-	  .ul  {
-	  	padding: 0; margin: 0; list-style-type: none
+	 .sushi {
+	  	background-color: black;
+	  	height: 40px;
+	  	width: 40px;
+	  	display: inline-block;
+	  	background-image: url('sushi.png');
+	  	background-size: contain;
+	  }
+	  .blank {
+	  	background-color: black;
+	  	height: 40px;
+	  	width: 40px;
+	  	display: inline-block;
+	  }
+	  #ninjaman {
+	  	background-color: black;
+	  	height: 40px;
+	  	width: 40px;
+	  	display: inline-block;
+	  	background-image: url('ninja.gif');
+	  	background-size: contain;
+	  	position: absolute;
+	  
+	  }
+	  .onigiri{
+	  	background-color: black;
+	  	height: 40px;
+	  	width: 40px;
+	  	display: inline-block;
+	  	background-image: url('onigiri.png');
+	  	background-size: contain;
+	  
 
 	  }
-	  .li {padding: 0; margin: 0; list-style-type: none;
-	  	   display: inline-block; 
-	  	   border: 1px solid #000;
-	  	}
 
-	  	
-
-
-	  }
+	  
 	</style>
 </head>
 <body>
-	<div id='world'>
-	  <div class = 'row'>
-		   <div class = 'wall'></div>
-		   <div class = 'wall'></div>
-		   <div class = 'wall'></div>
-	       <div class = 'wall'></div>
-		   <div class = 'wall'></div>
-		 
-	  </div>
-	  <div class = 'row'>
-		   <div class = 'wall'></div>
-		   <div class = 'blank'></div>
-		   <div class = 'sushi'></div>
-	       <div class = 'sushi'></div>
-		   <div class = 'wall'></div>
-		   
-	  </div>
-		 <div class = 'row'>
-		   <div class = 'wall'></div>
-		   <div class = 'sushi'></div>
-		   <div class = 'wall'></div>
-	       <div class = 'sushi'></div>
-		   <div class = 'wall'></div>
-		   
-	  </div>
-		 <div class = 'row'>
-		   <div class = 'wall'></div>
-		   <div class = 'sushi'></div>
-		   <div class = 'sushi'></div>
-	       <div class = 'sushi'></div>
-		   <div class = 'wall'></div>
-		   
-	  </div>
-	
+	<div id='world'></div>
+	<div id='ninjaman'></div><br/>
+	<div id='score'></div>
+	</body>
+	<script type="text/javascript">
+		var world = [
+            [1,1,1,1,1],
+            [1,0,3,2,1],
+            [1,2,1,2,1],
+            [1,2,2,3,1],
+            [1,2,2,2,1],
+            [1,2,1,2,1],
+            [1,3,2,2,1],
+            [1,2,2,2,1],
+            [1,2,1,3,1],
+            [1,2,2,2,1],
+            [1,1,1,1,1],
+		];
+		var worldDict = {
+		    0: 'blank',
+			1: 'wall',
+			2: 'sushi',
+			3: 'onigiri'
+		}
+        var score = 0;
+
+		function drawWorld(){
+			console.log(score);
+			output = "";
+
+			for(var row = 0; row < world.length; row++){
+				output += "<div class = 'row'>"
+				for(var x = 0; x < world[row].length; x++){
+					output += "<div class = '" + worldDict[world[row][x]] +"'></div>"
+				}
+				
+				output += "</div>"
+			}
+			document.getElementById('world').innerHTML = output;
+			document.getElementById('score').innerHTML = score++;
+			
+			
+		}
+		drawWorld();
+
+		var ninjaman = {
+			x:1,
+			y:1
+		}
+		
+
+		function drawNinjaman(){
+			document.getElementById('ninjaman').style.top = ninjaman.y * 40 + 'px'
+			document.getElementById('ninjaman').style.left = ninjaman.x * 40 + 'px'
+		}
+		drawNinjaman()
+
+		document.onkeydown = function(e){
+			
+            if(e.keyCode == 37){//left
+            	if(world[ninjaman.y][ninjaman.x-1] != 1){
+            		ninjaman.x--;
+            		if(world[ninjaman.y][ninjaman.x] == 2 || world[ninjaman.y][ninjaman.x] == 3){
+            			score++;
+            				
+            		}
+            	}
+			}
+			if(e.keyCode == 39){//right
+				if(world[ninjaman.y][ninjaman.x+1] != 1){
+				ninjaman.x++;
+			if(world[ninjaman.y][ninjaman.x] == 2 || world[ninjaman.y][ninjaman.x] == 3){
+				score++;
+				
+			       }
+			    }
+			}
+			if(e.keyCode == 40){//down
+				if(world[ninjaman.y+1][ninjaman.x] != 1){
+				ninjaman.y++;
+			    if(world[ninjaman.y][ninjaman.x] == 2 || world[ninjaman.y][ninjaman.x] == 3){
+			       score++;
+			       
+			       }
+			    }
+			}
+			if(e.keyCode == 38){//up
+				if(world[ninjaman.y-1][ninjaman.x] != 1){
+				ninjaman.y--;
+                if(world[ninjaman.y][ninjaman.x] == 2 || world[ninjaman.y][ninjaman.x] == 3){
+			      score++;
+			      
+			      }
+                
+                 }
+ 			
+			}
+			
+
+			world[ninjaman.y][ninjaman.x] = 0;
+			drawNinjaman()
+            drawWorld()
+			
+			
+
+		}
+	</script>
+	</html>
